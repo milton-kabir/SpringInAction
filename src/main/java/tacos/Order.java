@@ -1,5 +1,6 @@
 package tacos;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,20 +10,23 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.CreditCardNumber;
+import org.hibernate.validator.constraints.NotBlank;
 
 import lombok.Data;
 
 @Data
 @Entity
 @Table(name = "Taco_Order")
-public class Order {
+public class Order implements Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,20 +34,23 @@ public class Order {
 
   private Date placedAt;
 
-  @NotBlank(message = "Name is required")
-  private String name;
+  @ManyToOne
+  private User user;
+
+  @NotBlank(message = "Delivery name is required")
+  private String deliveryName;
 
   @NotBlank(message = "Street is required")
-  private String street;
+  private String deliveryStreet;
 
   @NotBlank(message = "City is required")
-  private String city;
+  private String deliveryCity;
 
   @NotBlank(message = "State is required")
-  private String state;
+  private String deliveryState;
 
   @NotBlank(message = "Zip code is required")
-  private String zip;
+  private String deliveryZip;
 
   @CreditCardNumber(message = "Not a valid credit card number")
   private String ccNumber;
